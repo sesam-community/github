@@ -45,9 +45,9 @@ Make sure the required env variables are defined.
     "type": "system:microservice",
     "docker": {
         "environment": {
-        "token": "$SECRET(github-token)",
-        "username": "$ENV(github-user)",
-        "base_url": "$ENV(github-base-url)"
+        "github_token": "$SECRET(github-token)",
+        "github_username": "$ENV(github-user)",
+        "github_base_url": "$ENV(github-base-url)"
         },
         "image": "sesamcommunity/github:latest",
         "port": 5000
