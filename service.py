@@ -47,6 +47,7 @@ def org_user(org):
 
     payload = {"email": json_data["email"]}
     invi_username = json_data["username"]
+    email = json_data["email"]
     return_msg = None
 
 
@@ -70,11 +71,11 @@ def org_user(org):
             logger.info(f'Trying to add user: {invi_username}')
             invi_response = requests.post(f"{config.github-base-url}/orgs/{org}/invitations", auth=(username, token), data=json.dumps(payload))
             if invi_response.status_code == 201:
-                logger.info(f"Organization invitation sent to email: {json_data["email"]}")
-                return_msg = f"Organization invitation sent to email: {json_data["email"]}"
+                logger.info(f"Organization invitation sent to email: {email}")
+                return_msg = f"Organization invitation sent to email: {email}"
             if invi_response.status_code == 422:
-                logger.info(f"Organization invitation could not be sent to email: {json_data["email"]}")
-                return_msg = f"Organization invitation could not be sent to email: {json_data["email"]}"
+                logger.info(f"Organization invitation could not be sent to email: {email}")
+                return_msg = f"Organization invitation could not be sent to email: {email}"
 
     return return_msg
 
