@@ -76,7 +76,7 @@ Make sure the required env variables are defined.
             "rules": {
             "default": [
                 ["add", "::username", "_S.username"],
-                ["add, "::email", "_S.email"],
+                ["add", "::email", "_S.email"],
                 ["if", ["eq", "_S._deleted", true],
                 ["add", "::deleted", true],
                 ["add", "::deleted", false]]
