@@ -14,12 +14,12 @@ Supports GET, POST, DELETE
 This repo uses the file ```package.json``` and [yarn](https://yarnpkg.com/lang/en/) to run the required commands.
 
 1. Make sure you have installed yarn.
-2. Creata a file called ```helpers.json``` and set username and password in the following format:
+2. Creata a file called ```helpers.json``` and set username, token and base_url in the following format:
 ```
 {
-    "username": "some username",
-    "password": "some password"
-    "base_url": "some url"
+    "github-username": "some username",
+    "github-token": "some token",
+    "github-base-url": "some url"
 }
 ```
 3. run:
@@ -45,9 +45,9 @@ Make sure the required env variables are defined.
     "type": "system:microservice",
     "docker": {
         "environment": {
-        "password": "$SECRET(github-password)",
+        "token": "$SECRET(github-token)",
         "username": "$ENV(github-user)",
-        "base_url": "$ENV(github-base_url)"
+        "base_url": "$ENV(github-base-url)"
         },
         "image": "sesamcommunity/github:latest",
         "port": 5000
@@ -89,4 +89,13 @@ Make sure the required env variables are defined.
 ## Routes
 ```
     /org_user/<org>
+```
+
+## Expected payload:
+```
+    {
+	"email": "this.is@email.com",
+	"username": "userGithub007",
+	"deleted": false
+    }
 ```

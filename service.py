@@ -12,17 +12,17 @@ logger = sesam_logger("Steve the logger", app=app)
 try:
     with open("helpers.json", "r") as stream:
         env_vars = json.load(stream)
-        os.environ['username'] = env_vars['username']
-        os.environ['token'] = env_vars['token']
-        os.environ['base_url'] = env_vars['base_url']
+        os.environ['github-username'] = env_vars['github-username']
+        os.environ['github-token'] = env_vars['github-token']
+        os.environ['github-base-url'] = env_vars['github-base-url']
 except OSError as e:
     logger.info("Using env vars defined in SESAM")
 
 ## Helpers
-required_env_vars = ['username', 'token', 'base_url']
+required_env_vars = ['github-username', 'github-token', 'github-base-url']
 optional_env_vars = ["page_size"]
-username = os.getenv('username')
-token = os.getenv('token')
+username = os.getenv('github-username')
+token = os.getenv('github-token')
 
 @app.route('/')
 def index():
@@ -39,7 +39,9 @@ def org_user(org):
     if not config.validate():
         sys.exit(1)
 
+    ## helper
     return_msg = None
+
     request_data = request.get_data()
     json_data = json.loads(str(request_data.decode("utf-8")))
 
@@ -49,7 +51,7 @@ def org_user(org):
 
 
     if json_data['deleted'] == True:
-        data = requests.delete(f"{config.base_url}/orgs/{org}/members/{invi_username}", auth=(username, token))
+        data = requests.delete(f"{config.github-base-url}/orgs/{org}/members/{invi_username}", auth=(username, token))
         if data.status_code == 204:
             logger.info('User has been removed from organization')
             return_msg = 'User has been removed from organization'
@@ -58,7 +60,7 @@ def org_user(org):
             return_msg = 'Not allowed to remove user from organization. Status code: 403'
 
     else:
-        data = requests.get(f"{config.base_url}/orgs/{org}/members/{invi_username}", auth=(username, token))
+        data = requests.get(f"{config.github-base-url}/orgs/{org}/members/{invi_username}", auth=(username, token))
         if data.status_code == 204:
             logger.info('User already part of organization')
             return_msg = 'User already part of organization'
@@ -66,7 +68,7 @@ def org_user(org):
         if data.status_code == 404:
             logger.info('User not part of organization')
             logger.info(f'Trying to add user: {invi_username}')
-            invi_response = requests.post(f"{config.base_url}/orgs/{org}/invitations", auth=(username, token), data=json.dumps(payload))
+            invi_response = requests.post(f"{config.github-base-url}/orgs/{org}/invitations", auth=(username, token), data=json.dumps(payload))
             if invi_response.status_code == 201:
                 logger.info(f"Organization invitation sent to email: {email}")
                 return_msg = f"Organization invitation sent to email: {email}"
