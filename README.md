@@ -93,9 +93,15 @@ Make sure the required env variables are defined.
 
 ## Expected payload:
 ```
-    {
-	"email": "this.is@email.com",
-	"username": "userGithub007",
-	"deleted": false
-    }
+    [{
+        "_id": "niceness",
+        "email": "this.is@email.com",
+	    "username": "userGithub007",
+	    "deleted": false
+    },{
+        "_id": "niceness2",
+        "email": "this.is2@email.com",
+        "username": "userGithub008",
+        "deleted": false
+    }]
 ```
