@@ -43,9 +43,8 @@ def org_user(org):
     json_data = json.loads(str(request_data.decode("utf-8")))
 
     for element in json_data:
-        payload = {"email": element["email"]}
+        payload = {"invitee_id": element["username"]}
         invi_username = element["username"]
-        email = element["email"]
 
         if element['deleted'] == True:
             data = requests.delete(f"{config.github_base_url}/orgs/{org}/members/{invi_username}", auth=(username, token))
@@ -66,9 +65,9 @@ def org_user(org):
                 logger.info(f'Trying to add user: {invi_username}')
                 invi_response = requests.post(f"{config.github_base_url}/orgs/{org}/invitations", auth=(username, token), data=json.dumps(payload))
                 if invi_response.status_code == 201:
-                    logger.info(f"Organization invitation sent to email: {email}")
+                    logger.info(f"Organization invitation sent to username: {invi_username}")
                 if invi_response.status_code == 422:
-                    logger.info(f"Organization invitation could not be sent to email: {email}")
+                    logger.info(f"Organization invitation could not be sent to username: {invi_username}")
 
     return jsonify({'Steve reporting': "work complete..."})
 
