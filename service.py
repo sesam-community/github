@@ -11,6 +11,7 @@ logger = sesam_logger("Steve the logger", app=app)
 ## Logic for running program in dev
 try:
     with open("helpers.json", "r") as stream:
+        logger.info("Setting env vars via helpers.json")
         env_vars = json.load(stream)
         os.environ['github_username'] = env_vars['github-username']
         os.environ['github_token'] = env_vars['github-token']
