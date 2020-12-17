@@ -44,11 +44,10 @@ def org_user(org):
     json_data = json.loads(str(request_data.decode("utf-8")))
 
     for element in json_data:
-        payload = {"invitee_id": element["username"]}
         invi_username = element["username"]
 
         if element['deleted'] == True:
-            data = requests.delete(f"{config.github_base_url}/orgs/{org}/members/{invi_username}", auth=(username, token))
+            data = requests.delete(f"{config.github_base_url}/orgs/{org}/memberships/{invi_username}", auth=(username, token))
             if data.status_code == 204:
                 logger.info('User has been removed from organization')
             if data.status_code == 403:
@@ -64,11 +63,17 @@ def org_user(org):
             if data.status_code == 404:
                 logger.info('User not part of organization')
                 logger.info(f'Trying to add user: {invi_username}')
-                invi_response = requests.post(f"{config.github_base_url}/orgs/{org}/invitations", auth=(username, token), data=json.dumps(payload))
-                if invi_response.status_code == 201:
-                    logger.info(f"Organization invitation sent to username: {invi_username}")
-                if invi_response.status_code == 422:
-                    logger.info(f"Organization invitation could not be sent to username: {invi_username}")
+                invi_response = requests.put(f"{config.github_base_url}/orgs/{org}/memberships/{invi_username}", auth=(username, token))
+                if invi_response.status_code == 200:
+                    decoded_data = json.loads(invi_response.content.decode('utf-8-sig'))
+                    if decoded_data.get('state') == "pending":
+                        logger.info(f"Organization invitation sent to username: {invi_username}")
+                    if decoded_data.get('state') == "active":
+                        logger.info(f"User with username: {invi_username}, already part of organization")
+                    
+                if invi_response.status_code == 422 or invi_response.status_code == 403:
+                    logger.warning(f"Organization invitation could not be sent to username: {invi_username}")
+                    logger.warning(f"Failed with error code: {invi_response.status_code}")
 
     return jsonify({'Steve reporting': "work complete..."})
 
