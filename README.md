@@ -14,7 +14,7 @@ Supports GET, POST, DELETE
 This repo uses the file ```package.json``` and [yarn](https://yarnpkg.com/lang/en/) to run the required commands.
 
 1. Make sure you have installed yarn.
-2. Creata a file called ```helpers.json``` and set username, token and base_url in the following format:
+2. Create a file called ```helpers.json``` and set username, token and base_url in the following format:
 ```
 {
     "github-username": "some username",
