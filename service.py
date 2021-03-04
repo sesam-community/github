@@ -70,11 +70,12 @@ def org_user(org):
                         logger.info(f"Organization invitation sent to username: {invi_username}")
                     if decoded_data.get('state') == "active":
                         logger.info(f"User with username: {invi_username}, already part of organization")
-                    
-                if invi_response.status_code == 422 or invi_response.status_code == 403:
+                elif invi_response.status_code == 422 or invi_response.status_code == 403:
                     logger.warning(f"Organization invitation could not be sent to username: {invi_username}")
                     logger.warning(f"Failed with error code: {invi_response.status_code}")
-
+                else:
+                    logger.warning(f"Failed to invite user: {invi_username} with status code: {invi_response.status_code}")
+                    
     return jsonify({'Steve reporting': "work complete..."})
 
 if __name__ == '__main__':
